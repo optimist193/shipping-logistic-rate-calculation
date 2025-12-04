@@ -1,27 +1,22 @@
-# shipping-logistic-rate-calculation
-#
-# Shipping Calculator Django Project
 
-A simple web application to calculate shipping costs for logistics companies.
+from django.db import models
 
-## Features
-- Calculate shipping costs based on weight and distance
-- Compare multiple carriers (UPS, FedEx, DHL, USPS)
-- Different service types (Standard, Express, Overnight)
-- Simple and user-friendly interface
+class ShippingRate(models.Model):
+    """Model to store shipping rates for different zones"""
+    zone_name = models.CharField(max_length=100)
+    base_price = models.DecimalField(max_digits=10, decimal_places=2)
+    price_per_kg = models.DecimalField(max_digits=10, decimal_places=2)
+    price_per_km = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    def __str__(self):
+        return f"{self.zone_name} - ${self.base_price}"
 
-## Installation
-1. Clone the repository
-2. Install requirements: `pip install -r requirements.txt`
-3. Run migrations: `python manage.py migrate`
-4. Start server: `python manage.py runserver`
-5. Visit http://localhost:8000
-
-## Usage
-1. Enter package weight (kg)
-2. Enter distance (km)
-3. Select service type
-4. Click "Calculate Shipping"
-
-## License
-Apache 2.0
+class Carrier(models.Model):
+    """Model for different shipping carriers"""
+    name = models.CharField(max_length=100)
+    base_rate = models.DecimalField(max_digits=10, decimal_places=2)
+    service_type = models.CharField(max_length=50)
+    delivery_days = models.IntegerField()
+    
+    def __str__(self):
+        return self.name
